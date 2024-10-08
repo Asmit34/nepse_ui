@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'stockmanagementsystem.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'nepse',
+        'NAME': 'stock',
         'USER': 'postgres',
         'PASSWORD': 'asmitoli123',
         'HOST': 'localhost',

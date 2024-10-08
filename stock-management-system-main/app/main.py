@@ -1,27 +1,38 @@
 import pandas as pd
 from sqlalchemy import create_engine
+import os
 
-# Define the connection to PostgreSQL
-db_config = {
-    'user': 'postgres',
-    'password': 'asmitoli123',
-    'host': 'localhost',
-    'port': 5432,
-    'database': 'nepse'
-}
+# Database configuration
+DB_NAME = 'stock'
+DB_USER = 'postgres'
+DB_PASSWORD = 'asmitoli123'
+DB_HOST = 'localhost'
+DB_PORT = '5432'
 
-# Create the database connection using SQLAlchemy
-connection_string = f"postgresql://{db_config['user']}:{db_config['password']}@{db_config['host']}:{db_config['port']}/{db_config['database']}"
+# Create a connection string
+connection_string = f'postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
 engine = create_engine(connection_string)
 
-# Read CSV file into pandas DataFrame
-csv_file_path = r'C:\Users\Asmit\Desktop\stock-management-system-main\agm_reports.csv'
-df = pd.read_csv(csv_file_path)
+def load_csv_to_db(directory):
+    # Iterate over each file in the specified directory
+    for filename in os.listdir(directory):
+        if filename.endswith('.csv'):
+            # Extract the table name from the file name (remove .csv extension)
+            table_name = filename[:-4]  # Remove the last 4 characters (".csv")
+            file_path = os.path.join(directory, filename)
+            print(f'Loading {file_path} into table "{table_name}"...')
 
-# Define the table name where you want to load the data
-table_name = 'agm_reports'
+            try:
+                # Read the CSV file into a DataFrame
+                df = pd.read_csv(file_path)
+                
+                # Insert the DataFrame into the PostgreSQL table
+                df.to_sql(table_name, engine, if_exists='append', index=False)
+                print(f'{filename} loaded successfully into table "{table_name}".')
+            
+            except Exception as e:
+                print(f'Error loading {filename}: {e}')
 
-# Load DataFrame to PostgreSQL table
-df.to_sql(table_name, engine, if_exists='append', index=False)
-
-print(f"Data from {csv_file_path} has been successfully loaded into {table_name} table.")
+# Directory containing the CSV files
+csv_directory = r'C:\Users\Asmit\Desktop\stock-management-system-main\csv'
+load_csv_to_db(csv_directory)

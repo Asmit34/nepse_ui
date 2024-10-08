@@ -17,6 +17,7 @@ urlpatterns = [
     path('top-gainer/', views.top_gainers_view, name='top_gainer'),
     path('top-loser/', views.top_loser_view, name='top_loser'),
     path('top-trades/', views.top_trades_view, name='top_trades'),
+    path('weekly-reports/', views.weekly_reports_view, name='weekly_reports'),
     path('top-transactions/', views.top_transactions_view, name='top_transactions'),
     path('top-turnover/', views.top_turnover_view, name='top_turnover'),
     path('trading-average/', views.trading_average_view, name='trading_average'),

@@ -247,3 +247,17 @@ class FloorSheet(models.Model):
     class Meta:
         db_table = 'floorsheet_data'
         managed = False
+
+class WeeklyReport(models.Model):
+    SN = models.BigIntegerField(primary_key=True)
+    Name = models.TextField(db_column='Contract No.')
+    Description = models.TextField(db_column='Stock Symbol')
+    publishedDate = models.TextField(db_column=" Published Date") 
+    fileLink = models.TextField(db_column="File Link")
+
+
+    class Meta:
+        db_table = 'weekly_reports'
+        managed = False
+
+

@@ -15,6 +15,7 @@ from .models import (
     TopTransaction,
     TopTurnover,
     TradingAverage,
+    WeeklyReport,
 )
 from django.core.mail import send_mail
 from django.contrib import messages
@@ -322,3 +323,26 @@ def send_message_view(request):
     # Handle invalid requests
     messages.error(request, 'Invalid request. Please try again.')
     return redirect('contact_us')  # Redirect to the contact page
+
+def weekly_reports_view(request):
+    query = request.GET.get('q', '')
+    date = request.GET.get('date', '')
+    
+    reports = WeeklyReport.objects.all()
+
+    if query:
+        reports = reports.filter(Name__icontains=query)
+    if date:
+        reports = reports.filter(publishedDate=date)
+    
+    paginator = Paginator(reports, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'query': query,
+        'date': date,
+        'page_obj': page_obj,
+    }
+    
+    return render(request, 'app/weekly_reports.html', context)

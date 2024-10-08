@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+Stock Management System - About Us
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h1>About Us</h1>
+    <p>
+      Welcome to the Stock Management System! Our platform provides live updates on stock markets, indices, and stock-related information. We aim to deliver accurate and real-time data from multiple sources to help users make informed financial decisions.
+    </p>
+    <p>
+      Our mission is to provide fast, reliable, and transparent stock data that empowers users to better understand and interact with financial markets.
+    </p>
+    <h2>Our Team</h2>
+    <p>
+      We are a dedicated team committed to offering high-quality data services for stock markets.
+    </p>
+  </div>
+
+  <style>
+    .container {
+      margin: 100px 10% 0 10%;
+    }
+    .container h1, .container h2 {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .container p {
+      font-size: 1.1em;
+      line-height: 1.6em;
+      text-align: justify;
+    }
+  </style>
+{% endblock %}

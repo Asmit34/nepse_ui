@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Live Indices</h1>
+    <div class="search-bar">
+        <form method="GET" action="{% url 'live_indices' %}">
+            <input type="text" name="search" placeholder="Search..." required>
+            <button type="submit">Search</button>
+        </form>
+    </div>
+    <div class="data">
+        <table>
+            <thead>
+                <tr>
+                    <th>Key</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for index in live_indices %}
+                <tr>
+                    <td>{{ index.key }}</td>
+                    <td>{{ index.value }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="2">No live indices data available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .container {
+        margin: 100px 10% 0 10%;
+        background-color: var(--light-grey);
+    }
+    .container h1 {
+        margin-top: 10px;
+    }
+    .search-bar {
+        margin-top: 20px;
+        height: 30px;
+        background-color: var(--primary-color);
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    td, th {
+        border: 1px solid black;
+        padding: 10px;
+        text-align: left;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            margin: 20px;
+            padding: 10px;
+        }
+        table {
+            font-size: 14px; 
+        }
+    }
+</style>
+{% endblock %}

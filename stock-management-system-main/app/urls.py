@@ -22,6 +22,6 @@ urlpatterns = [
     path('trading-average/', views.trading_average_view, name='trading_average'),
     path('faq/', views.faq_view, name='faq'),
     path('about/', views.about_view, name='about'),
-    path('contact/', views.contact_us_view, name='contact'),
+    path('contact-us/', views.contact_us_view, name='contact_us'),
     path('send-message/', views.send_message_view, name='send_message'), 
 ]

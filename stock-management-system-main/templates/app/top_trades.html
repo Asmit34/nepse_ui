@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Top Trades</h1>
+    <div class="search-bar">
+        <form method="GET" action="{% url 'top_trades' %}">
+            <input type="text" name="query" placeholder="Search by Security ID" required>
+            <button type="submit">Search</button>
+        </form>
+    </div>
+    <div class="data">
+        <table>
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Shares Traded</th>
+                    <th>Closing Price</th>
+                    <th>Security Name</th>
+                    <th>Security ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for trade in top_trades %}
+                <tr>
+                    <td>{{ trade.symbol }}</td>
+                    <td>{{ trade.shareTraded }}</td> 
+                    <td>{{ trade.closingPrice }}</td>
+                    <td>{{ trade.securityName }}</td>
+                    <td>{{ trade.securityId }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No trades found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="pagination">
+        {% if top_trades.has_previous %}
+            <a href="?page=1&query={{ request.GET.query }}">First</a>
+            <a href="?page={{ top_trades.previous_page_number }}&query={{ request.GET.query }}">Previous</a>
+        {% endif %}
+
+        <span>Page {{ top_trades.number }} of {{ top_trades.paginator.num_pages }}</span>
+
+        {% if top_trades.has_next %}
+            <a href="?page={{ top_trades.next_page_number }}&query={{ request.GET.query }}">Next</a>
+            <a href="?page={{ top_trades.paginator.num_pages }}&query={{ request.GET.query }}">Last</a>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .container {
+        margin: 100px 10% 0 10%;
+        background-color: var(--light-grey);
+    }
+    .container h1 {
+        margin-top: 10px;
+    }
+    .search-bar {
+        margin-top: 20px;
+        background-color: var(--primary-color);
+    }
+    .search-bar form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .search-bar input {
+        padding: 5px;
+        margin-right: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    .search-bar button {
+        padding: 5px 10px;
+        border: none;
+        border-radius: 4px;
+        background-color: var(--button-color);
+        color: white;
+        cursor: pointer;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    td, th {
+        border: 1px solid black;
+        padding: 10px;
+        text-align: left;
+    }
+    .pagination {
+        margin-top: 20px;
+        text-align: center;
+    }
+    .pagination a {
+        margin: 0 5px;
+        text-decoration: none;
+        color: var(--button-color);
+    }
+</style>
+{% endblock %}

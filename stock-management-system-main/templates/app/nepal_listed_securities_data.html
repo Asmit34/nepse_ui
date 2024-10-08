@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Nepal Listed Securities</h1>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+        <form method="GET" action="{% url 'nepal_listed_securities' %}">
+            <input type="text" name="q" placeholder="Search by company name..." value="{{ search_query }}">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <!-- Securities Table -->
+    <div class="data">
+        <table>
+            <thead>
+                <tr>
+                    <th>SN</th>
+                    <th>Company Name</th>
+                    <th>Symbol</th>
+                    <th>Status</th>
+                    <th>Sector</th>
+                    <th>Instrument</th>
+                    <th>Email</th>
+                    <th>Website</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if page_obj.object_list %}
+                    {% for security in page_obj %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ security.Name }}</td>
+                        <td>{{ security.Symbol }}</td>
+                        <td>{{ security.Status }}</td>
+                        <td>{{ security.Sector }}</td>
+                        <td>{{ security.Instrument }}</td>
+                        <td>{{ security.Email }}</td>
+                        <td>{{ security.Website }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="8">No listed securities data available.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?q={{ search_query }}&page=1">&laquo; first</a>
+                <a href="?q={{ search_query }}&page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?q={{ search_query }}&page={{ page_obj.next_page_number }}">next</a>
+                <a href="?q={{ search_query }}&page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+
+<style>
+    .container {
+        margin: 100px 10% 0 10%;
+        background-color: var(--light-grey);
+    }
+    .container h1 {
+        margin-top: 10px;
+    }
+    .search-bar {
+        margin-top: 20px;
+        background-color: var(--primary-color);
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    td, th {
+        border: 1px solid black;
+        padding: 10px;
+        text-align: left;
+    }
+    .pagination {
+        margin-top: 20px;
+    }
+</style>
+{% endblock %}

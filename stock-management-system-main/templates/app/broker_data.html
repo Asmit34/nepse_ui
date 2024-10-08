@@ -1,0 +1,90 @@
+{% extends 'base.html' %} 
+
+{% block content %}
+<div class="container">
+    <h1>Broker Data</h1>
+    <div class="search-bar">
+    </div>
+    <div class="data">
+        <table>
+            <thead>
+                <tr>
+                    <th>Total Pages</th>
+                    <th>Last</th>
+                    <th>Total Elements</th>
+                    <th>Size</th>
+                    <th>Number</th>
+                    <th>First</th>
+                    <th>Number of Elements</th>
+                    <th>Empty</th>
+                    <th>Pageable Sort Unsorted</th>
+                    <th>Pageable Sort Sorted</th>
+                    <th>Pageable Sort Empty</th>
+                    <th>Pageable Offset</th>
+                    <th>Pageable Page Number</th>
+                    <th>Pageable Page Size</th>
+                    <th>Pageable Paged</th>
+                    <th>Pageable Unpaged</th>
+                    <th>Sort Unsorted</th>
+                    <th>Sort Sorted</th>
+                    <th>Sort Empty</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for broker in broker_data %}
+                <tr>
+                    <td>{{ broker.total_pages }}</td>
+                    <td>{{ broker.last }}</td>
+                    <td>{{ broker.total_elements }}</td>
+                    <td>{{ broker.size }}</td>
+                    <td>{{ broker.number }}</td>
+                    <td>{{ broker.first }}</td>
+                    <td>{{ broker.number_of_elements }}</td>
+                    <td>{{ broker.empty }}</td>
+                    <td>{{ broker.pageable_sort_unsorted }}</td>
+                    <td>{{ broker.pageable_sort_sorted }}</td>
+                    <td>{{ broker.pageable_sort_empty }}</td>
+                    <td>{{ broker.pageable_offset }}</td>
+                    <td>{{ broker.pageable_page_number }}</td>
+                    <td>{{ broker.pageable_page_size }}</td>
+                    <td>{{ broker.pageable_paged }}</td>
+                    <td>{{ broker.pageable_unpaged }}</td>
+                    <td>{{ broker.sort_unsorted }}</td>
+                    <td>{{ broker.sort_sorted }}</td>
+                    <td>{{ broker.sort_empty }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="18">No data available</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .container {
+        margin: 100px 10% 0 10%;
+        background-color: var(--light-grey);
+    }
+    .container h1 {
+        margin-top: 10px;
+    }
+    .search-bar {
+        margin-top: 20px;
+        height: 30px;
+        background-color: var(--primary-color);
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    td, th {
+        border: 1px solid black;
+        padding: 10px;
+        text-align: left;
+    }
+</style>
+{% endblock %}

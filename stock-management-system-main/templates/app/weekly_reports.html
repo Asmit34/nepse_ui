@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Stock Management System - Weekly Reports
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h1>Weekly Reports</h1>
+
+    <!-- Search Form -->
+    <form method="GET" action="{% url 'weekly_reports' %}" class="form-inline">
+      <input type="text" name="q" class="form-control mb-2 mr-sm-2" placeholder="Search by Name" value="{{ query }}">
+      <input type="date" name="date" class="form-control mb-2 mr-sm-2" value="{{ date }}">
+      <button type="submit" class="btn btn-primary mb-2">Search</button>
+    </form>
+
+    <!-- Reports Table -->
+    <table class="table">
+      <thead>
+        <tr>
+          <th>SN</th>
+          <th>Contract No.</th>
+          <th>Stock Symbol</th>
+          <th>Published Date</th>
+          <th>File Link</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if page_obj.object_list %}
+          {% for report in page_obj %}
+            <tr>
+              <td>{{ report.SN }}</td>
+              <td>{{ report.Name }}</td>
+              <td>{{ report.Description }}</td>
+              <td>{{ report.publishedDate }}</td>
+              <td><a href="{{ report.fileLink }}" target="_blank">Download</a></td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="5">No reports found.</td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <nav aria-label="Page navigation">
+      <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?q={{ query }}&date={{ date }}&page={{ page_obj.previous_page_number }}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+          <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+            <a class="page-link" href="?q={{ query }}&date={{ date }}&page={{ num }}">{{ num }}</a>
+          </li>
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?q={{ query }}&date={{ date }}&page={{ page_obj.next_page_number }}" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+
+  <style>
+    .container {
+      margin: 100px 10%;
+    }
+    .container h1 {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .table th, .table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+    .table th {
+      background-color: #f2f2f2;
+      text-align: left;
+    }
+    .pagination {
+      margin-top: 20px;
+    }
+    .form-inline {
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .form-inline .form-control {
+      margin-right: 10px;
+    }
+  </style>
+{% endblock %}

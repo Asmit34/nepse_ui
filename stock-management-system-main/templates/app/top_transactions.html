@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Top Transactions</h1>
+    <div class="search-bar">
+        <form method="GET" action="{% url 'top_transactions' %}">
+            <input type="text" name="query" placeholder="Search by Security ID" value="{{ request.GET.query }}">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+    <div class="data">
+        <table>
+            <thead>
+                <tr>
+                    <th>Security ID</th>
+                    <th>Total Trades</th>
+                    <th>Last Trades Price</th>
+                    <th>Security Name</th>
+                    <th>Symbol</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in top_transactions %}
+                <tr>
+                    <td>{{ transaction.securityId }}</td>
+                    <td>{{ transaction.totalTrades }}</td>
+                    <td>{{ transaction.lastTradedPrice }}</td>
+                    <td>{{ transaction.securityName }}</td>
+                    <td>{{ transaction.symbol }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No transactions found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="pagination">
+        {% if top_transactions.has_previous %}
+            <a href="?page=1&query={{ request.GET.query }}">First</a>
+            <a href="?page={{ top_transactions.previous_page_number }}&query={{ request.GET.query }}">Previous</a>
+        {% endif %}
+
+        <span>Page {{ top_transactions.number }} of {{ top_transactions.paginator.num_pages }}</span>
+
+        {% if top_transactions.has_next %}
+            <a href="?page={{ top_transactions.next_page_number }}&query={{ request.GET.query }}">Next</a>
+            <a href="?page={{ top_transactions.paginator.num_pages }}&query={{ request.GET.query }}">Last</a>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .container {
+        margin: 100px 10% 0 10%;
+        background-color: var(--light-grey);
+    }
+    .container h1 {
+        margin-top: 10px;
+    }
+    .search-bar {
+        margin-top: 20px;
+        background-color: var(--primary-color);
+    }
+    .search-bar form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .search-bar input {
+        padding: 5px;
+        margin-right: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    .search-bar button {
+        padding: 5px 10px;
+        border: none;
+        border-radius: 4px;
+        background-color: var(--button-color);
+        color: white;
+        cursor: pointer;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    td, th {
+        border: 1px solid black;
+        padding: 10px;
+        text-align: left;
+    }
+    .pagination {
+        margin-top: 20px;
+        text-align: center;
+    }
+    .pagination a {
+        margin: 0 5px;
+        text-decoration: none;
+        color: var(--button-color);
+    }
+</style>
+{% endblock %}

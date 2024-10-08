@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Live Stocks</h1>
+    <div class="search-bar">
+        <!-- Search input -->
+        <input type="text" id="stockSearch" placeholder="Search by security name or symbol..." onkeyup="filterStocks()">
+    </div>
+    
+    <div class="data">
+        <table id="liveStocksTable" class="table table-striped" aria-label="Live stock data">
+            <thead>
+                <tr>
+                    <th>Security ID</th>
+                    <th>Security Name</th>
+                    <th>Symbol</th>
+                    <th>Index Id</th>
+                    <th>Open Price</th>
+                    <th>High Price</th>
+                    <th>Low Price</th>
+                    <th>Total Trade Quantity</th>
+                    <th>Total Trade Value</th>
+                    <th>Last Traded Price</th>
+                    <th>Percentage Change</th>
+                    <th>Last Updated Date Time</th>
+                    <th>Last Traded Volume</th>
+                    <th>Previous Close</th>
+                    <th>Average Traded Prices</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if live_stocks %}
+                    {% for stock in live_stocks %}
+                    <tr>
+                        <td>{{ stock.securityId }}</td>
+                        <td>{{ stock.securityName }}</td>
+                        <td>{{ stock.symbol }}</td>
+                        <td>{{ stock.indexId }}</td>
+                        <td>{{ stock.openPrice }}</td>
+                        <td>{{ stock.highPrice }}</td>
+                        <td>{{ stock.lowPrice }}</td>
+                        <td>{{ stock.totalTradeQuantity }}</td>
+                        <td>{{ stock.totalTradeValue }}</td>
+                        <td>{{ stock.lastTradedPrice }}</td>
+                        <td>{{ stock.percentageChange }}</td>
+                        <td>{{ stock.lastUpdatedDatetime }}</td>
+                        <td>{{ stock.lastTradedVolume }}</td>
+                        <td>{{ stock.previousClose }}</td>
+                        <td>{{ stock.averageTradedPrice }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="15">No live stock data available.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+        <!-- Pagination Controls -->
+        <div class="pagination">
+            <span class="step-links">
+                {% if live_stocks.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ live_stocks.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ live_stocks.number }} of {{ live_stocks.paginator.num_pages }}.
+                </span>
+
+                {% if live_stocks.has_next %}
+                    <a href="?page={{ live_stocks.next_page_number }}">next</a>
+                    <a href="?page={{ live_stocks.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+</div>
+
+<style>
+    .pagination {
+        margin-top: 20px;
+        text-align: center;
+    }
+    .pagination a {
+        margin: 0 5px;
+        padding: 5px 10px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+    .pagination a:hover {
+        background-color: #0056b3;
+    }
+    .pagination .current {
+        margin: 0 5px;
+        padding: 5px 10px;
+        background-color: #6c757d;
+        color: white;
+    }
+    .table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+    }
+    .table th, .table td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+    .table th {
+        background-color: #f2f2f2;
+    }
+</style>
+
+<script>
+    function filterStocks() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("stockSearch");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("liveStocksTable");
+        tr = table.getElementsByTagName("tr");
+
+        var noMatchFound = true;
+
+        for (i = 1; i < tr.length; i++) {
+            let found = false;
+            let tds = tr[i].getElementsByTagName("td");
+            for (let j = 1; j < 3; j++) {  
+                if (tds[j]) {
+                    txtValue = tds[j].textContent || tds[j].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            tr[i].style.display = found ? "" : "none";
+            if (found) {
+                noMatchFound = false;
+            }
+        }
+
+        if (noMatchFound) {
+            let existingMessage = table.querySelector('.no-match-message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            let noMatchRow = document.createElement('tr');
+            noMatchRow.className = 'no-match-message';
+            noMatchRow.innerHTML = '<td colspan="15">No stocks found.</td>';
+            table.querySelector('tbody').appendChild(noMatchRow);
+        } else {
+            let existingMessage = table.querySelector('.no-match-message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+        }
+    }
+</script>
+{% endblock %}

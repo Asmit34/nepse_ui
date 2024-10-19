@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Market Summary</h1>
+    <div class="search-bar">
+        <input type="text" id="summarySearch" placeholder="Search by business date..." value="{{ search_query }}" onkeyup="filterSummary()">
+    </div>
+    <div class="data">
+        <table id="marketSummaryTable">
+            <thead>
+                <tr>
+                    <th>Business Date</th>
+                    <th>Total Turnover</th>
+                    <th>Total Traded Shares</th>
+                    <th>Total Transactions</th>
+                    <th>Traded Scrips</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if market_summaries %}
+                    {% for summary in market_summaries %}
+                    <tr>
+                        <td>{{ summary.businessDate }}</td>
+                        <td>{{ summary.totalTurnover }}</td>
+                        <td>{{ summary.totalTradedShares }}</td>
+                        <td>{{ summary.totalTransactions }}</td>
+                        <td>{{ summary.tradedScrips }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5">No market summary data available.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+        <!-- Pagination Controls -->
+        <div class="pagination">
+            <span class="step-links">
+                {% if market_summaries.has_previous %}
+                    <a href="?page=1&search={{ search_query }}">&laquo; first</a>
+                    <a href="?page={{ market_summaries.previous_page_number }}&search={{ search_query }}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ market_summaries.number }} of {{ market_summaries.paginator.num_pages }}.
+                </span>
+
+                {% if market_summaries.has_next %}
+                    <a href="?page={{ market_summaries.next_page_number }}&search={{ search_query }}">next</a>
+                    <a href="?page={{ market_summaries.paginator.num_pages }}&search={{ search_query }}">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+</div>
+
+<style>
+    .container {
+        margin: 100px 10% 0 10%;
+        background-color: var(--light-grey);
+    }
+    .container h1 {
+        margin-top: 10px;
+    }
+    .search-bar {
+        margin-top: 20px;
+        height: 30px;
+        background-color: var(--primary-color);
+    }
+    #summarySearch {
+        width: 100%;
+        padding: 5px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    td, th {
+        border: 1px solid black;
+        padding: 10px;
+        text-align: left;
+    }
+    .pagination {
+        margin-top: 20px;
+        text-align: center;
+    }
+    .pagination a {
+        margin: 0 5px;
+        padding: 5px 10px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+    .pagination a:hover {
+        background-color: #0056b3;
+    }
+    .pagination .current {
+        margin: 0 5px;
+        padding: 5px 10px;
+        background-color: #6c757d;
+        color: white;
+    }
+</style>
+
+<script>
+    function filterSummary() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("summarySearch");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("marketSummaryTable");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 1; i < tr.length; i++) {
+            let tds = tr[i].getElementsByTagName("td");
+            let found = false;
+
+            if (tds.length > 0) {
+                txtValue = tds[0].textContent || tds[0].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    found = true;
+                }
+            }
+            tr[i].style.display = found ? "" : "none";
+        }
+    }
+</script>
+
+{% endblock %}

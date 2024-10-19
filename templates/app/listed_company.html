@@ -1,0 +1,189 @@
+<!-- listed_company.html -->
+{% extends 'base.html' %}
+{% load static %}  <!-- Load static files -->
+{% block title %} Listed Companies {% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Listed Companies</h2>
+
+    <!-- Search form and document link -->
+    <div class="search-container">
+        <form method="get" action="{% url 'listed_company' %}">
+            <input type="text" name="class" placeholder="Search by Class" value="{{ search_class }}">
+            <button type="submit">Search</button>
+        </form>
+        <!-- Document link -->
+        <a href="{% static 'document/document.pdf' %}" class="doc-link" target="_blank">Official Document</a>
+
+    </div>
+
+    <!-- Table of listed companies -->
+    <table>
+        <thead>
+            <tr>
+                <th>SN</th>
+                <th>Name</th>
+                <th>Symbol</th>
+                <th>Status</th>
+                <th>Sector</th>
+                <th>Class</th>
+                <th>Instrument</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for company in page_obj %}
+            <tr>
+                <td>{{ company.SN }}</td>
+                <td>{{ company.Name }}</td>
+                <td>{{ company.Symbol }}</td>
+                <td>{{ company.Status }}</td>
+                <td>{{ company.Sector }}</td>
+                <td>{{ company.Class }}</td>
+                <td>{{ company.Instrument }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7">No companies found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Pagination controls -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?{% if search_class %}class={{ search_class }}&{% endif %}page=1">&laquo; first</a>
+                <a href="?{% if search_class %}class={{ search_class }}&{% endif %}page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?{% if search_class %}class={{ search_class }}&{% endif %}page={{ page_obj.next_page_number }}">next</a>
+                <a href="?{% if search_class %}class={{ search_class }}&{% endif %}page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+
+<style>
+    /* CSS Styles */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        width: 80%;
+        margin: 20px auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+        text-align: center;
+        color: #333;
+    }
+
+    /* Search form */
+    .search-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    form {
+        margin-right: 10px;
+    }
+
+    input[type="text"] {
+        width: 250px;
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+    }
+
+    button {
+        padding: 8px 16px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    .doc-link {
+        padding: 8px 16px;
+        background-color: #28a745;
+        color: #fff;
+        border-radius: 4px;
+        text-decoration: none;
+        margin-left: 10px;
+    }
+
+    .doc-link:hover {
+        background-color: #218838;
+    }
+
+    /* Table styling */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    /* Pagination controls */
+    .pagination {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .pagination .step-links a {
+        margin: 0 5px;
+        padding: 8px 12px;
+        text-decoration: none;
+        background-color: #007bff;
+        color: white;
+        border-radius: 4px;
+    }
+
+    .pagination .step-links .current {
+        margin: 0 5px;
+        padding: 8px 12px;
+        background-color: #6c757d;
+        color: white;
+        border-radius: 4px;
+    }
+
+    .pagination .step-links a:hover {
+        background-color: #0056b3;
+    }
+</style>
+{% endblock %}

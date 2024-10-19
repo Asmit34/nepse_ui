@@ -1,0 +1,33 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.index_view, name='index'),
+    path('terms-and-conditions/', views.terms_condition_view, name='terms_conditions'),
+    path('all-securities/', views.all_securities_view, name='all_securities'),
+    path('broker-data/', views.broker_data_view, name='broker_data'),
+    path('live-indices/', views.live_indices_view, name='live_indices'),
+    path('live-stock/', views.live_stock_view, name='live_stock'),
+    path('market-cap/', views.market_cap_view, name='market_cap'),
+    path('market-summary/', views.market_summary_view, name='market_summary'),
+    path('floorsheet-data/', views.floorsheet_data_view, name='floorsheet_data'),
+    path('nepal-listed-securities/', views.nepal_listed_securities_view, name='nepal_listed_securities'),
+    path('sectorwise-summary/', views.sectorwise_summary_view, name='sectorwise_summary'),
+    path('todays-prices/', views.todays_prices_view, name='todays_prices'),
+    path('top-gainer/', views.top_gainers_view, name='top_gainer'),
+    path('top-loser/', views.top_loser_view, name='top_loser'),
+    path('top-trades/', views.top_trades_view, name='top_trades'),
+    path('weekly-reports/', views.weekly_reports_view, name='weekly_reports'),
+    path('monthly-reports/', views.monthly_reports_view, name='monthly_reports'),
+    path('annual-reports/', views.annual_reports_view, name='annual_reports'),
+    path('agm-reports/', views.agm_reports_view, name='agm_reports'),
+    path('listing_info/', views.listing_info, name='listing_info'),
+    path('listed_company/', views.listed_company_view, name='listed_company'),
+    path('top-transactions/', views.top_transactions_view, name='top_transactions'),
+    path('top-turnover/', views.top_turnover_view, name='top_turnover'),
+    path('trading-average/', views.trading_average_view, name='trading_average'),
+    path('faq/', views.faq_view, name='faq'),
+    path('about/', views.about_view, name='about'),
+    path('contact-us/', views.contact_us_view, name='contact_us'),
+    path('send-message/', views.send_message_view, name='send_message'), 
+]

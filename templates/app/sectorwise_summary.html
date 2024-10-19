@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Sectorwise Summary</h1>
+
+    <!-- Search Bar for Business Date -->
+    <div class="search-bar">
+        <form method="GET" action="{% url 'sectorwise_summary' %}">
+            <input type="text" name="q" placeholder="Search by Business Date..." value="{{ search_query }}">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <!-- Sectorwise Summary Table -->
+    <div class="data">
+        <table>
+            <thead>
+                <tr>
+                    <th>Business Date</th>
+                    <th>Sector Name</th>
+                    <th>Turnover Values</th>
+                    <th>Turnover Volume</th>
+                    <th>Total Transaction</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if sectorwise_summaries %}
+                    {% for summary in sectorwise_summaries %}
+                    <tr>
+                        <td>{{ summary.businessDate }}</td>
+                        <td>{{ summary.sectorName }}</td>
+                        <td>{{ summary.turnOverValues }}</td>
+                        <td>{{ summary.turnOverVolume }}</td>
+                        <td>{{ summary.totalTransaction }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5">No matching sectorwise summary data available.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .container {
+        margin: 100px 10% 0 10%;
+        background-color: var(--light-grey);
+    }
+    .container h1 {
+        margin-top: 10px;
+    }
+    .search-bar {
+        margin-top: 20px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    td, th {
+        border: 1px solid black;
+        padding: 10px;
+        text-align: left;
+    }
+</style>
+{% endblock %}

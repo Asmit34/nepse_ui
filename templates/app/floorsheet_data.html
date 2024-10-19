@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Floorsheet Data</h1>
+
+    <!-- Search bar -->
+    <div class="search-bar">
+        <form method="GET" action="{% url 'floorsheet_data' %}">
+            <input type="text" name="query" placeholder="Search by Stock Symbol" value="{{ query }}">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <!-- Floorsheet data table -->
+    <div class="data">
+        <table>
+            <thead>
+                <tr>
+                    <th>SN</th>
+                    <th>Contract No.</th>
+                    <th>Stock Symbol</th>
+                    <th>Buyer</th>
+                    <th>Seller</th>
+                    <th>Rate (Rs)</th>
+                    <th>Amount (Rs)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in floorsheet_records %}
+                <tr>
+                    <td>{{ record.SN }}</td>
+                    <td>{{ record.Contract_No }}</td>
+                    <td>{{ record.stockSymbol }}</td>
+                    <td>{{ record.Buyer }}</td>
+                    <td>{{ record.Seller }}</td>
+                    <td>{{ record.Rate }}</td>
+                    <td>{{ record.Amount }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7">No records found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        {% if floorsheet_records.has_previous %}
+            <a href="?page=1&query={{ query }}">First</a>
+            <a href="?page={{ floorsheet_records.previous_page_number }}&query={{ query }}">Previous</a>
+        {% endif %}
+
+        <span>Page {{ floorsheet_records.number }} of {{ floorsheet_records.paginator.num_pages }}</span>
+
+        {% if floorsheet_records.has_next %}
+            <a href="?page={{ floorsheet_records.next_page_number }}&query={{ query }}">Next</a>
+            <a href="?page={{ floorsheet_records.paginator.num_pages }}&query={{ query }}">Last</a>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .container {
+        margin: 100px 10% 0 10%;
+        background-color: var(--light-grey);
+        padding: 20px;
+        border-radius: 10px;
+    }
+    h1 {
+        margin-top: 10px;
+    }
+    .search-bar {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .search-bar input {
+        padding: 5px;
+        margin-right: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    .search-bar button {
+        padding: 5px 10px;
+        border: none;
+        border-radius: 4px;
+        background-color: var(--primary-color);
+        color: white;
+        cursor: pointer;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    th, td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid black;
+    }
+    .pagination {
+        margin-top: 20px;
+        text-align: center;
+    }
+    .pagination a {
+        margin: 0 5px;
+        text-decoration: none;
+        color: var(--button-color);
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,41 @@
+<footer id="footer">
+  <div class="footer-content">
+    <p>&copy; {{ current_year }} Stock Management System. All rights reserved.</p>
+    <ul>
+      <li><a href="{% url 'about' %}">About Us</a></li>
+      <li><a href="{% url 'terms_conditions' %}">Terms & Conditions</a></li>
+    </ul>
+  </div>
+</footer>
+
+<style>
+  #footer {
+    background-color: #6C757D;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+  }
+
+  #footer a {
+    color: white;
+    text-decoration: none;
+  }
+
+  #footer a:hover {
+    text-decoration: underline;
+  }
+
+  .footer-content ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 10px 0 0;
+  }
+
+  .footer-content li {
+    display: inline;
+    margin: 0 15px;
+  }
+</style>

@@ -1,0 +1,158 @@
+{% load static %}
+
+<nav id="navbar">
+  <div class="logo">
+    <a href="{% url 'index' %}">STOCK MANAGEMENT SYSTEM</a>
+  </div>
+  <ul id="nav-list">
+    <li class="nav-dropdown">
+      <a href="#" class="nav-main-item">Markets <span class="caret">▼</span></a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="{% url 'live_indices' %}">Live Indices</a></li>
+        <li><a href="{% url 'market_summary' %}">Market Summary</a></li>
+        <li><a href="{% url 'top_gainer' %}">Top Gainers</a></li>
+        <li><a href="{% url 'top_loser' %}">Top Losers</a></li>
+        <li><a href="{% url 'market_cap' %}">Market Cap</a></li>
+        <li><a href="{% url 'live_stock' %}">Live Stock</a></li>
+        <li><a href="{% url 'sectorwise_summary' %}">Sector-wise Summary</a></li>
+        <li><a href="{% url 'todays_prices' %}">Today's Prices</a></li>
+        <li><a href="{% url 'top_trades' %}">Top Trades</a></li>
+        <li><a href="{% url 'top_transactions' %}">Top Transactions</a></li>
+        <li><a href="{% url 'trading_average' %}">Trading Average</a></li>
+      </ul>
+    </li>
+
+    <!-- Data Section -->
+    <li class="nav-dropdown">
+      <a href="#" class="nav-main-item">Data <span class="caret">▼</span></a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="{% url 'all_securities' %}">All Securities</a></li>
+        <li><a href="{% url 'broker_data' %}">Broker Data</a></li>
+        <li><a href="{% url 'nepal_listed_securities' %}">Nepal Listed Securities</a></li>
+        <li><a href="{% url 'floorsheet_data' %}">FloorSheet Data</a></li>
+      </ul>
+    </li>
+
+    <!-- Additional menu items -->
+    <li><a href="{% url 'faq' %}">FAQ</a></li>
+    <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
+
+    <!-- Authentication options -->
+    {% if user.is_authenticated %}
+      <li><a href="{% url 'profile_view' user.id %}">{{ user.username }}</a></li>
+      <li><a href="{% url 'logout' %}">Logout</a></li>
+    {% else %}
+      <li><a href="{% url 'signup' %}">Login/Signup</a></li>
+    {% endif %}
+  </ul>
+</nav>
+
+<!-- Include the existing styles -->
+
+<style>
+  #navbar {
+    background-color: #007BFF;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+    padding: 0 2rem;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    font-family: Arial, sans-serif;
+  }
+
+  .logo a {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+  }
+
+  #nav-list {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  #nav-list li {
+    margin: 0 15px;
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-main-item {
+    cursor: pointer;
+    color: white;
+    text-decoration: none;
+    padding: 15px 15px;
+    transition: background-color 0.3s;
+    border-radius: 5px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 1.1em;
+  } /* <-- Missing closing curly brace fixed here */
+
+  .caret {
+    margin-left: 5px;
+    font-size: 0.8em;
+    transition: transform 0.3s ease;
+  }
+
+  .nav-dropdown:hover .caret {
+    transform: rotate(180deg);
+  }
+
+  #nav-list a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    transition: background-color 0.3s;
+    border-radius: 5px;
+    font-size: 1.1em;
+  }
+
+  #nav-list a:hover {
+    background-color: #0056b3;
+  }
+
+  .nav-dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .nav-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #007BFF;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    border-radius: 8px;
+    padding: 10px 0;
+  }
+
+  .nav-dropdown:hover .nav-dropdown-menu {
+    display: block;
+  }
+
+  .nav-dropdown-menu a {
+    color: white;
+    padding: 10px 15px;
+    display: block;
+    white-space: nowrap;
+    text-align: center;
+    font-size: 1em;
+  }
+
+  .nav-dropdown-menu a:hover {
+    background-color: #0056b3;
+  }
+</style>

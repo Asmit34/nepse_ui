@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Today's Prices</h1>
+    <div class="search-bar">
+        <form method="GET" action="{% url 'todays_prices' %}">
+            <input type="text" name="query" placeholder="Search by Security ID, Symbol, or Name" required>
+            <button type="submit">Search</button>
+        </form>
+    </div>
+    <div class="data">
+        <table>
+            <thead>
+                <tr>
+                    <th>S.N</th>
+                    <th>Business Date</th>
+                    <th>Security ID</th>
+                    <th>Symbol</th>
+                    <th>Security Name</th>
+                    <th>Open Price</th>
+                    <th>High Price</th>
+                    <th>Low Price</th>
+                    <th>Close Price</th>
+                    <th>Total Traded Quantity</th>
+                    <th>Total Traded Value</th>
+                    <th>Previous Day Close Price</th>
+                    <th>52 Weeks High</th>
+                    <th>52 Weeks Low</th>
+                    <th>Last Updated Time</th>
+                    <th>Last Updated Price</th>
+                    <th>Total Trades</th>
+                    <th>Average Traded Price</th>
+                    <th>Market Capitalization</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for price in todays_prices %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ price.BUSINESS_DATE }}</td>
+                    <td>{{ price.SECURITY_ID }}</td>
+                    <td>{{ price.SYMBOL }}</td>
+                    <td>{{ price.SECURITY_NAME }}</td>
+                    <td>{{ price.OPEN_PRICE }}</td>
+                    <td>{{ price.HIGH_PRICE }}</td>
+                    <td>{{ price.LOW_PRICE }}</td>
+                    <td>{{ price.CLOSE_PRICE }}</td>
+                    <td>{{ price.TOTAL_TRADED_QUANTITY }}</td>
+                    <td>{{ price.TOTAL_TRADED_VALUE }}</td>
+                    <td>{{ price.PREVIOUS_DAY_CLOSE_PRICE }}</td>
+                    <td>{{ price.FIFTY_TWO_WEEKS_HIGH }}</td>
+                    <td>{{ price.FIFTY_TWO_WEEKS_LOW }}</td>
+                    <td>{{ price.LAST_UPDATED_TIME }}</td>
+                    <td>{{ price.LAST_UPDATED_PRICE }}</td>
+                    <td>{{ price.TOTAL_TRADES }}</td>
+                    <td>{{ price.AVERAGE_TRADED_PRICE }}</td>
+                    <td>{{ price.MARKET_CAPITALIZATION }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="pagination">
+        {% if todays_prices.has_previous %}
+            <a href="?page=1&query={{ request.GET.query }}">First</a>
+            <a href="?page={{ todays_prices.previous_page_number }}&query={{ request.GET.query }}">Previous</a>
+        {% endif %}
+
+        <span>Page {{ todays_prices.number }} of {{ todays_prices.paginator.num_pages }}</span>
+
+        {% if todays_prices.has_next %}
+            <a href="?page={{ todays_prices.next_page_number }}&query={{ request.GET.query }}">Next</a>
+            <a href="?page={{ todays_prices.paginator.num_pages }}&query={{ request.GET.query }}">Last</a>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .container {
+        margin: 100px 10% 0 10%;
+        background-color: var(--light-grey);
+    }
+    .container h1 {
+        margin-top: 10px;
+    }
+    .search-bar {
+        margin-top: 20px;
+        height: 30px;
+        background-color: var(--primary-color);
+    }
+    .search-bar form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .search-bar input {
+        padding: 5px;
+        margin-right: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    .search-bar button {
+        padding: 5px 10px;
+        border: none;
+        border-radius: 4px;
+        background-color: var(--button-color);
+        color: white;
+        cursor: pointer;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    td, th {
+        border: 1px solid black;
+        padding: 10px;
+        text-align: left;
+    }
+    .pagination {
+        margin-top: 20px;
+        text-align: center;
+    }
+    .pagination a {
+        margin: 0 5px;
+        text-decoration: none;
+        color: var(--button-color);
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+
+{% block title %}Market Capitalization{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Market Capitalization Data</h1>
+    
+    <div class="search-bar">
+        <!-- Search input -->
+        <input type="text" id="marketCapSearch" placeholder="Search by business date..." onkeyup="filterMarketCaps()">
+    </div>
+
+    <div class="data">
+        <table id="marketCapTable" class="table table-striped" aria-label="Market capitalization data">
+            <thead>
+                <tr>
+                    <th>Business Date</th>
+                    <th>Sen Market Cap (NPR)</th>
+                    <th>Sen Float Market Cap (NPR)</th>
+                    <th>Float Market Cap (NPR)</th>
+                    <th>Total Market Cap (NPR)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if market_caps %}
+                    {% for market_data in market_caps %}
+                    <tr>
+                        <td>{{ market_data.businessDate }}</td>
+                        <td>{{ market_data.senMarCap }}</td>
+                        <td>{{ market_data.senFloatMarCap }}</td>
+                        <td>{{ market_data.floatMarCap }}</td>
+                        <td>{{ market_data.marCap }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5">No market capitalization data available.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+        <!-- Pagination Controls -->
+        <div class="pagination">
+            <span class="step-links">
+                {% if market_caps.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ market_caps.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ market_caps.number }} of {{ market_caps.paginator.num_pages }}.
+                </span>
+
+                {% if market_caps.has_next %}
+                    <a href="?page={{ market_caps.next_page_number }}">next</a>
+                    <a href="?page={{ market_caps.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+</div>
+
+<style>
+    .container {
+        margin: 100px 10%;
+        padding: 20px;
+        background-color: var(--light-grey);
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .container h1 {
+        margin-top: 10px;
+        color: var(--primary-color);
+        text-align: center;
+    }
+    .search-bar {
+        margin-top: 20px;
+        text-align: center;
+    }
+    .search-bar input {
+        padding: 10px;
+        width: 80%;
+        border-radius: 5px;
+        border: 1px solid var(--secondary-color);
+        font-size: 16px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        font-family: "Poppins", sans-serif;
+    }
+    th {
+        background-color: var(--primary-color);
+        color: var(--white);
+        padding: 10px;
+    }
+    td {
+        border: 1px solid var(--light-grey);
+        padding: 10px;
+        text-align: left;
+    }
+    tr:nth-child(even) {
+        background-color: var(--light-grey);
+    }
+    tr:hover {
+        background-color: var(--secondary-color);
+        color: var(--white);
+    }
+    .pagination {
+        margin-top: 20px;
+        text-align: center;
+    }
+    .pagination a {
+        margin: 0 5px;
+        padding: 5px 10px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+    .pagination a:hover {
+        background-color: #0056b3;
+    }
+    .pagination .current {
+        margin: 0 5px;
+        padding: 5px 10px;
+        background-color: #6c757d;
+        color: white;
+    }
+</style>
+
+<script>
+    function filterMarketCaps() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("marketCapSearch");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("marketCapTable");
+        tr = table.getElementsByTagName("tr");
+
+        var noMatchFound = true;
+
+        for (i = 1; i < tr.length; i++) {
+            let found = false;
+            let tds = tr[i].getElementsByTagName("td");
+            if (tds.length > 0) {
+                txtValue = tds[0].textContent || tds[0].innerText; // Searching by business date
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    found = true;
+                }
+            }
+            tr[i].style.display = found ? "" : "none";
+            if (found) {
+                noMatchFound = false;
+            }
+        }
+
+        if (noMatchFound) {
+            let existingMessage = table.querySelector('.no-match-message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            let noMatchRow = document.createElement('tr');
+            noMatchRow.className = 'no-match-message';
+            noMatchRow.innerHTML = '<td colspan="5">No market capitalization data found.</td>';
+            table.querySelector('tbody').appendChild(noMatchRow);
+        } else {
+            let existingMessage = table.querySelector('.no-match-message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+        }
+    }
+</script>
+{% endblock %}

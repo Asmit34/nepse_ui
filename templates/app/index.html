@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+{% block title %} Stock Management System {% endblock %}
+
+{% block content %}
+  <div class="container">
+    <!-- Navigation Section -->
+    <section class="home-nav">
+      <ul class="home-nav-list">
+        <li><a href="{% url 'index' %}">Home</a></li>
+        <li class="dropdown">
+          Company <i class="fa-solid fa-caret-down"></i>
+          <ul class="dropdown-menu">
+            <li><a href="{% url 'listed_company' %}">Company Classification</a></li>
+            <li><a href="{% url 'listing_info' %}">Listing Information</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          Report <i class="fa-solid fa-caret-down"></i>
+          <ul class="dropdown-menu">
+            <li><a href="{% url 'weekly_reports' %}">Weekly Reports</a></li>
+            <li><a href="{% url 'monthly_reports' %}">Monthly Reports</a></li>
+            <li><a href="{% url 'annual_reports' %}">Annual Reports</a></li>
+            <li><a href="{% url 'agm_reports' %}">AGM Reports</a></li>
+            <li><a href="#">Other Reports</a></li>
+          </ul>
+        </li>
+      </ul>
+      <div class="news-display"></div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market">
+      <div class="gainers-losers">
+        <div class="buttons">
+          <button class="gainers active">Top Gainers</button>
+          <button class="losers">Top Losers</button>
+        </div>
+        <!-- Gainers Table -->
+        <table class="gainers-table">
+          <thead>
+            <tr>
+              <th>Symbol</th>
+              <th>LTP</th>
+              <th>Pt. Change</th>
+              <th>% Change</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for stock in top_gainers %}
+            <tr>
+              <td>{{ stock.symbol }}</td>
+              <td>{{ stock.ltp }}</td>
+              <td style="color: var(--success-color);">{{ stock.point_change }}</td>
+              <td style="color: var(--success-color);">{{ stock.percentage_change }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <!-- Losers Table -->
+        <table class="losers-table hidden">
+          <thead>
+            <tr>
+              <th>Symbol</th>
+              <th>LTP</th>
+              <th>Pt. Change</th>
+              <th>% Change</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for stock in top_losers %}
+            <tr>
+              <td>{{ stock.symbol }}</td>
+              <td>{{ stock.ltp }}</td>
+              <td style="color: var(--error-color);">{{ stock.point_change }}</td>
+              <td style="color: var(--error-color);">{{ stock.percentage_change }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <a href="{% url 'top_gainer' %}" class="view-more">View more</a>
+      </div>
+
+      <div class="turnovers">
+        <div class="buttons">
+          <button class="turnover active">Top Turnover</button>
+          <button class="volume">Top Volume</button>
+          <button class="transaction">Top Transactions</button>
+        </div>
+
+        <!-- Turnover Table -->
+        <table class="turnover-table">
+          <thead>
+            <tr>
+              <th>Symbol</th>
+              <th>Turnover</th>
+              <th>LTP</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for stock in top_turnover %}
+            <tr>
+              <td>{{ stock.symbol }}</td>
+              <td>{{ stock.turnover }}</td>
+              <td>{{ stock.ltp }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <a href="{% url 'top_turnover' %}" class="view-more">View More</a>
+      </div>
+    </section>
+  </div>
+
+  <style>
+    .container {
+      margin: 80px 10% 0 10%;
+    }
+    .home-nav {
+      position: relative;
+    }
+    .home-nav-list {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      background-color: var(--secondary-color);
+      height: 60px;
+      align-items: center;
+      padding: 20px;
+      color: var(--white);
+    }
+    .home-nav-list a {
+      color: var(--white);
+      font-size: 1.1rem;
+      padding: 10px;
+    }
+    .home-nav-list a:hover {
+      color: var(--primary-color);
+    }
+    .news-display {
+      background-color: var(--primary-color);
+      height: 30px;
+    }
+    .fa-caret-down {
+      margin-left: 10px;
+    }
+    .home-nav-list li {
+      position: relative;
+      color: var(--white);
+      font-size: 1.1rem;
+      padding: 10px;
+    }
+    .dropdown:hover {
+      cursor: pointer;
+      color: var(--primary-color);
+    }
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 300px;
+      background-color: var(--primary-color);
+      box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+    }
+    .dropdown-menu li {
+      padding: 8px 12px;
+    }
+    .dropdown-menu li a {
+      color: var(--white);
+      font-size: 1rem;
+    }
+    .dropdown:hover .dropdown-menu {
+      display: block;
+    }
+    .market {
+      margin-top: 30px;
+    }
+    .gainers-losers,
+    .turnovers {
+      margin-bottom: 30px;
+    }
+    .buttons {
+      display: flex;
+      margin-bottom: 20px;
+    }
+    .buttons button {
+      background-color: var(--secondary-color);
+      color: var(--white);
+      border: none;
+      padding: 10px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+    .buttons button.active {
+      background-color: var(--primary-color);
+    }
+    .view-more {
+      display: inline-block;
+      margin-top: 10px;
+      text-decoration: none;
+      color: var(--primary-color);
+      font-weight: bold;
+    }
+    .view-more:hover {
+      text-decoration: underline;
+    }
+  </style>
+{% endblock %}

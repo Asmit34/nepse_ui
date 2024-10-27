@@ -1,8 +1,10 @@
 from django.urls import path
 from . import views
+from .views import market_overview
 
 urlpatterns = [
-    path('', views.index_view, name='index'),
+    # path('', views.index_view, name='index'),
+    path('', market_overview, name='home'),
     path('terms-and-conditions/', views.terms_condition_view, name='terms_conditions'),
     path('all-securities/', views.all_securities_view, name='all_securities'),
     path('broker-data/', views.broker_data_view, name='broker_data'),
@@ -23,6 +25,12 @@ urlpatterns = [
     path('agm-reports/', views.agm_reports_view, name='agm_reports'),
     path('listing_info/', views.listing_info, name='listing_info'),
     path('listed_company/', views.listed_company_view, name='listed_company'),
+    path('market-overview/', views.market_overview, name='market_overview'),
+    path('gainers/', views.view_all_gainers, name='view_gainers'),
+    path('losers/', views.view_all_losers, name='view_losers'),
+    path('trades/', views.view_all_trades, name='view_trades'),
+    path('transactions/', views.view_all_transactions, name='view_transactions'),
+    path('turnovers/', views.view_all_turnovers, name='view_turnovers'),
     path('top-transactions/', views.top_transactions_view, name='top_transactions'),
     path('top-turnover/', views.top_turnover_view, name='top_turnover'),
     path('trading-average/', views.trading_average_view, name='trading_average'),

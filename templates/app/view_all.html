@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f8f9fa;
+        }
+        h1 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .pagination span, .pagination a {
+            margin: 0 5px;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            text-decoration: none;
+            color: #007bff;
+        }
+        .pagination span {
+            background-color: #f8f9fa;
+            color: #6c757d;
+        }
+        .pagination a:hover {
+            background-color: #007bff;
+            color: white;
+        }
+        .disabled {
+            pointer-events: none;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ title }}</h1>
+    <table>
+        <thead>
+            <tr>
+                {% if title == 'Top Gainers' or title == 'Top Losers' %}
+                    <th>Symbol</th>
+                    <th>LTP</th>
+                    <th>Point Change</th>
+                    <th>% Change</th>
+                {% elif title == 'Top Trades' %}
+                    <th>Symbol</th>
+                    <th>Share Traded</th>
+                    <th>Closing Price</th>
+                {% elif title == 'Top Transactions' %}
+                    <th>Symbol</th>
+                    <th>Total Trades</th>
+                    <th>Last Traded Price</th>
+                {% elif title == 'Top Turnovers' %}
+                    <th>Symbol</th>
+                    <th>Turnover</th>
+                    <th>Closing Price</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% if data %}
+                {% for item in data %}
+                    <tr>
+                        {% if title == 'Top Gainers' or title == 'Top Losers' %}
+                            <td>{{ item.symbol }}</td>
+                            <td>{{ item.ltp }}</td>
+                            <td>{{ item.pointChange }}</td>
+                            <td>{{ item.percentageChange }}</td>
+                        {% elif title == 'Top Trades' %}
+                            <td>{{ item.symbol }}</td>
+                            <td>{{ item.shareTraded }}</td>
+                            <td>{{ item.closingPrice }}</td>
+                        {% elif title == 'Top Transactions' %}
+                            <td>{{ item.symbol }}</td>
+                            <td>{{ item.totalTrades }}</td>
+                            <td>{{ item.lastTradedPrice }}</td>
+                        {% elif title == 'Top Turnovers' %}
+                            <td>{{ item.symbol }}</td>
+                            <td>{{ item.turnover }}</td>
+                            <td>{{ item.closingPrice }}</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            {% else %}
+                {% if title == 'Top Gainers' or title == 'Top Losers' %}
+                    <tr><td colspan="4">No data available.</td></tr>
+                {% elif title == 'Top Trades' %}
+                    <tr><td colspan="3">No data available.</td></tr>
+                {% elif title == 'Top Transactions' %}
+                    <tr><td colspan="3">No data available.</td></tr>
+                {% elif title == 'Top Turnovers' %}
+                    <tr><td colspan="3">No data available.</td></tr>
+                {% endif %}
+            {% endif %}
+        </tbody>
+    </table>
+
+    <!-- Pagination controls -->
+    <div class="pagination">
+        <!-- First and Previous links -->
+        <!-- {% if data.has_previous %}
+            <a href="?page=1">« first</a>
+            <a href="?page={{ data.previous_page_number }}">previous</a>
+        {% else %} -->
+            <!-- <span class="disabled">« first</span>
+            <span class="disabled">previous</span>
+        {% endif %}
+     -->
+        <!-- Page numbers -->
+        <span>Page {{ data.number }} of {{ data.paginator.num_pages }}</span>
+    
+        <!-- Next and Last links -->
+        {% if data.has_next %}
+            <a href="?page={{ data.next_page_number }}">next</a>
+            <a href="?page={{ data.paginator.num_pages }}">last »</a>
+        {% else %}
+            <span class="disabled">next</span>
+            <span class="disabled">last »</span>
+        {% endif %}
+    </div>
+    
+
+    <button onclick="location.href='{% url 'market_overview' %}'">Back to Overview</button>
+</body>
+</html>
+{% endblock %}

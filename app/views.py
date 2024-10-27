@@ -21,6 +21,7 @@ from .models import (
     AGMReport,
     ClassificationOfListedCompany,
 )
+from .models import *
 from django.core.mail import send_mail
 from django.contrib import messages
 from django.core.paginator import Paginator
@@ -192,10 +193,6 @@ def top_gainers_view(request):
     }
 
     return render(request, 'app/top_gainers.html', context)
-
-def top_loser_view(request):
-    """Render the top loser page."""
-    return fetch_and_render(request, TopLoser, 'app/top_losers.html')
 
 def top_loser_view(request):
     # Get the search query from the request (for Security ID)
@@ -501,3 +498,55 @@ def listed_company_view(request):
         'search_class': search_class,
     }
     return render(request, 'app/listed_company.html', context)
+
+def market_overview(request):
+    print("Market Overview view is called.")
+    gainers = MarketTopGainer.objects.all()[:5]
+    print("Gainers:", gainers)
+    losers = MarketTopLoser.objects.all()[:5]
+    print("Losers:", losers)
+    trades = MarketTopTrades.objects.all()[:5]
+    print("Trades:", trades)
+    transactions = MarketTopTransaction.objects.all()[:5]
+    print("Transactions:", transactions)
+    turnovers = MarketTopTurnover.objects.all()[:5]
+    print("Turnovers:", turnovers)
+
+    context = {
+        'gainers': gainers,
+        'losers': losers,
+        'trades': trades,
+        'transactions': transactions,
+        'turnovers': turnovers,
+    }
+    return render(request, 'app/index.html', context)
+
+# Generic function to view all data (gainers, losers, trades, transactions, turnovers)
+def view_all(request, model, title):
+    data_list = model.objects.all()
+    paginator = Paginator(data_list, 10)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'title': title,
+        'data': page_obj,  # Pass the paginated data
+    }
+    return render(request, 'app/view_all.html', context)
+
+# Individual views calling the generic function
+def view_all_gainers(request):
+    return view_all(request, MarketTopGainer, 'Top Gainers')
+
+def view_all_losers(request):
+    return view_all(request, MarketTopLoser, 'Top Losers')
+
+def view_all_trades(request):
+    return view_all(request, MarketTopTrades, 'Top Trades')
+
+def view_all_transactions(request):
+    return view_all(request, MarketTopTransaction, 'Top Transactions')
+
+def view_all_turnovers(request):
+    return view_all(request, MarketTopTurnover, 'Top Turnovers')

@@ -2,212 +2,346 @@
 {% block title %} Stock Management System {% endblock %}
 
 {% block content %}
-  <div class="container">
-    <!-- Navigation Section -->
+<div class="container">
+    <!-- Navigation Section (Home, Company, Report) -->
     <section class="home-nav">
-      <ul class="home-nav-list">
-        <li><a href="{% url 'index' %}">Home</a></li>
-        <li class="dropdown">
-          Company <i class="fa-solid fa-caret-down"></i>
-          <ul class="dropdown-menu">
-            <li><a href="{% url 'listed_company' %}">Company Classification</a></li>
-            <li><a href="{% url 'listing_info' %}">Listing Information</a></li>
-          </ul>
-        </li>
-        <li class="dropdown">
-          Report <i class="fa-solid fa-caret-down"></i>
-          <ul class="dropdown-menu">
-            <li><a href="{% url 'weekly_reports' %}">Weekly Reports</a></li>
-            <li><a href="{% url 'monthly_reports' %}">Monthly Reports</a></li>
-            <li><a href="{% url 'annual_reports' %}">Annual Reports</a></li>
-            <li><a href="{% url 'agm_reports' %}">AGM Reports</a></li>
-            <li><a href="#">Other Reports</a></li>
-          </ul>
-        </li>
-      </ul>
-      <div class="news-display"></div>
+        <ul class="home-nav-list">
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li class="dropdown">
+                Company <i class="fa-solid fa-caret-down"></i>
+                <ul class="dropdown-menu">
+                    <li><a href="{% url 'listed_company' %}">Company Classification</a></li>
+                    <li><a href="{% url 'listing_info' %}">Listing Information</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                Report <i class="fa-solid fa-caret-down"></i>
+                <ul class="dropdown-menu">
+                    <li><a href="{% url 'weekly_reports' %}">Weekly Reports</a></li>
+                    <li><a href="{% url 'monthly_reports' %}">Monthly Reports</a></li>
+                    <li><a href="{% url 'annual_reports' %}">Annual Reports</a></li>
+                    <li><a href="{% url 'agm_reports' %}">AGM Reports</a></li>
+                    <li><a href="#">Other Reports</a></li>
+                </ul>
+            </li>
+        </ul>
+        <div class="news-display"></div>
     </section>
 
     <!-- Market Section -->
-    <section class="market">
-      <div class="gainers-losers">
-        <div class="buttons">
-          <button class="gainers active">Top Gainers</button>
-          <button class="losers">Top Losers</button>
-        </div>
-        <!-- Gainers Table -->
-        <table class="gainers-table">
-          <thead>
-            <tr>
-              <th>Symbol</th>
-              <th>LTP</th>
-              <th>Pt. Change</th>
-              <th>% Change</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for stock in top_gainers %}
-            <tr>
-              <td>{{ stock.symbol }}</td>
-              <td>{{ stock.ltp }}</td>
-              <td style="color: var(--success-color);">{{ stock.point_change }}</td>
-              <td style="color: var(--success-color);">{{ stock.percentage_change }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+    <div class="container">
+        <!-- <h1>Market Overview</h1> -->
 
-        <!-- Losers Table -->
-        <table class="losers-table hidden">
-          <thead>
-            <tr>
-              <th>Symbol</th>
-              <th>LTP</th>
-              <th>Pt. Change</th>
-              <th>% Change</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for stock in top_losers %}
-            <tr>
-              <td>{{ stock.symbol }}</td>
-              <td>{{ stock.ltp }}</td>
-              <td style="color: var(--error-color);">{{ stock.point_change }}</td>
-              <td style="color: var(--error-color);">{{ stock.percentage_change }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-
-        <a href="{% url 'top_gainer' %}" class="view-more">View more</a>
-      </div>
-
-      <div class="turnovers">
-        <div class="buttons">
-          <button class="turnover active">Top Turnover</button>
-          <button class="volume">Top Volume</button>
-          <button class="transaction">Top Transactions</button>
+        <!-- Buttons for Gainers/Losers -->
+        <div class="toggle-buttons">
+            <button class="gainers active" onclick="showTable('gainers')">Top Gainers</button>
+            <button class="losers" onclick="showTable('losers')">Top Losers</button>
         </div>
 
-        <!-- Turnover Table -->
-        <table class="turnover-table">
-          <thead>
-            <tr>
-              <th>Symbol</th>
-              <th>Turnover</th>
-              <th>LTP</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for stock in top_turnover %}
-            <tr>
-              <td>{{ stock.symbol }}</td>
-              <td>{{ stock.turnover }}</td>
-              <td>{{ stock.ltp }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+        <!-- Table for Top Gainers -->
+        <div class="market-section gainers-table">
+            <h2>Top Gainers</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>LTP</th>
+                        <th>Point Change</th>
+                        <th>% Change</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for gainer in gainers %}
+                    <tr>
+                        <td>{{ gainer.symbol }}</td>
+                        <td>{{ gainer.ltp }}</td>
+                        <td>{{ gainer.pointChange }}</td>
+                        <td>{{ gainer.percentageChange }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">No gainers data available.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button onclick="location.href='{% url 'view_gainers' %}'">View More</button>
+        </div>
 
-        <a href="{% url 'top_turnover' %}" class="view-more">View More</a>
-      </div>
-    </section>
-  </div>
+        <!-- Table for Top Losers -->
+        <div class="market-section losers-table hidden">
+            <h2>Top Losers</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>LTP</th>
+                        <th>Point Change</th>
+                        <th>% Change</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for loser in losers %}
+                    <tr>
+                        <td>{{ loser.symbol }}</td>
+                        <td>{{ loser.ltp }}</td>
+                        <td>{{ loser.pointChange }}</td>
+                        <td>{{ loser.percentageChange }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">No losers data available.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button onclick="location.href='{% url 'view_losers' %}'">View More</button>
+        </div>
 
-  <style>
+        <!-- Buttons for Turnover/Trades/Transactions -->
+        <div class="toggle-buttons">
+            <button class="turnover active" onclick="showTurnoverTable('turnover')">Top Turnover</button>
+            <button class="trades" onclick="showTurnoverTable('trades')">Top Trades</button>
+            <button class="transaction" onclick="showTurnoverTable('transactions')">Top Transactions</button>
+        </div>
+
+        <!-- Table for Top Turnover -->
+        <div class="market-section turnover-table">
+            <h2>Top Turnover</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Turnover</th>
+                        <th>Closing Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for turnover in turnovers %}
+                    <tr>
+                        <td>{{ turnover.symbol }}</td>
+                        <td>{{ turnover.turnover }}</td>
+                        <td>{{ turnover.closingPrice }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">No turnover data available.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button onclick="location.href='{% url 'view_turnovers' %}'">View More</button>
+        </div>
+
+        <!-- Table for Top Trades -->
+        <div class="market-section trades-table hidden">
+            <h2>Top Trades</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Share Traded</th>
+                        <th>Closing Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for trade in trades %}
+                    <tr>
+                        <td>{{ trade.symbol }}</td>
+                        <td>{{ trade.shareTraded }}</td>
+                        <td>{{ trade.closingPrice }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">No trades data available.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button onclick="location.href='{% url 'view_trades' %}'">View More</button>
+        </div>
+
+        <!-- Table for Top Transactions -->
+        <div class="market-section transactions-table hidden">
+            <h2>Top Transactions</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Total Trades</th>
+                        <th>Last Traded Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in transactions %}
+                    <tr>
+                        <td>{{ transaction.symbol }}</td>
+                        <td>{{ transaction.totalTrades }}</td>
+                        <td>{{ transaction.lastTradedPrice }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">No transactions data available.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button onclick="location.href='{% url 'view_transactions' %}'">View More</button>
+        </div>
+    </div>
+</div>
+
+<style>
     .container {
-      margin: 80px 10% 0 10%;
+        margin: 80px 10% 0 10%;
     }
     .home-nav {
-      position: relative;
+        position: relative;
     }
     .home-nav-list {
-      display: flex;
-      width: 100%;
-      justify-content: space-between;
-      background-color: var(--secondary-color);
-      height: 60px;
-      align-items: center;
-      padding: 20px;
-      color: var(--white);
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        background-color: var(--secondary-color);
+        height: 60px;
+        align-items: center;
+        padding: 20px;
+        color: var(--white);
     }
     .home-nav-list a {
-      color: var(--white);
-      font-size: 1.1rem;
-      padding: 10px;
+        color: var(--white);
+        font-size: 1.1rem;
+        padding: 10px;
     }
     .home-nav-list a:hover {
-      color: var(--primary-color);
+        color: var(--primary-color);
     }
     .news-display {
-      background-color: var(--primary-color);
-      height: 30px;
+        background-color: var(--primary-color);
+        height: 30px;
     }
     .fa-caret-down {
-      margin-left: 10px;
+        margin-left: 10px;
     }
     .home-nav-list li {
-      position: relative;
-      color: var(--white);
-      font-size: 1.1rem;
-      padding: 10px;
+        position: relative;
+        color: var(--white);
+        font-size: 1.1rem;
+        padding: 10px;
     }
     .dropdown:hover {
-      cursor: pointer;
-      color: var(--primary-color);
+        cursor: pointer;
+        color: var(--primary-color);
     }
     .dropdown-menu {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 300px;
-      background-color: var(--primary-color);
-      box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-      z-index: 1000;
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 300px;
+        background-color: var(--primary-color);
+        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
     }
     .dropdown-menu li {
-      padding: 8px 12px;
+        padding: 8px 12px;
     }
     .dropdown-menu li a {
-      color: var(--white);
-      font-size: 1rem;
+        color: var(--white);
+        font-size: 1rem;
     }
     .dropdown:hover .dropdown-menu {
-      display: block;
+        display: block;
     }
-    .market {
-      margin-top: 30px;
+    .toggle-buttons {
+        margin-bottom: 20px;
     }
-    .gainers-losers,
-    .turnovers {
-      margin-bottom: 30px;
+    .toggle-buttons button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        margin-right: 10px;
     }
-    .buttons {
-      display: flex;
-      margin-bottom: 20px;
+    .toggle-buttons button.active {
+        background-color: #0056b3;
     }
-    .buttons button {
-      background-color: var(--secondary-color);
-      color: var(--white);
-      border: none;
-      padding: 10px;
-      margin-right: 10px;
-      cursor: pointer;
+    .hidden {
+        display: none;
     }
-    .buttons button.active {
-      background-color: var(--primary-color);
+    table {
+        width: 100%;
+        border-collapse: collapse;
     }
-    .view-more {
-      display: inline-block;
-      margin-top: 10px;
-      text-decoration: none;
-      color: var(--primary-color);
-      font-weight: bold;
+    th, td {
+        padding: 10px;
+        border: 1px solid #ccc;
+        text-align: left;
     }
-    .view-more:hover {
-      text-decoration: underline;
+    th {
+        background-color: #f2f2f2;
     }
-  </style>
+    button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+    button:hover {
+        background-color: #218838;
+    }
+</style>
+
+<script>
+    function showTable(type) {
+        const gainersTable = document.querySelector('.gainers-table');
+        const losersTable = document.querySelector('.losers-table');
+        const gainersButton = document.querySelector('.gainers');
+        const losersButton = document.querySelector('.losers');
+
+        if (type === 'gainers') {
+            gainersTable.classList.remove('hidden');
+            losersTable.classList.add('hidden');
+            gainersButton.classList.add('active');
+            losersButton.classList.remove('active');
+        } else {
+            losersTable.classList.remove('hidden');
+            gainersTable.classList.add('hidden');
+            gainersButton.classList.remove('active');
+            losersButton.classList.add('active');
+        }
+    }
+
+    function showTurnoverTable(type) {
+        const turnoverTable = document.querySelector('.turnover-table');
+        const tradesTable = document.querySelector('.trades-table');
+        const transactionsTable = document.querySelector('.transactions-table');
+        const turnoverButton = document.querySelector('.turnover');
+        const tradesButton = document.querySelector('.trades');
+        const transactionsButton = document.querySelector('.transaction');
+
+        turnoverTable.classList.add('hidden');
+        tradesTable.classList.add('hidden');
+        transactionsTable.classList.add('hidden');
+        turnoverButton.classList.remove('active');
+        tradesButton.classList.remove('active');
+        transactionsButton.classList.remove('active');
+
+        if (type === 'turnover') {
+            turnoverTable.classList.remove('hidden');
+            turnoverButton.classList.add('active');
+        } else if (type === 'trades') {
+            tradesTable.classList.remove('hidden');
+            tradesButton.classList.add('active');
+        } else if (type === 'transactions') {
+            transactionsTable.classList.remove('hidden');
+            transactionsButton.classList.add('active');
+        }
+    }
+</script>
+
 {% endblock %}

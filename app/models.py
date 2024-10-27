@@ -310,5 +310,53 @@ class ClassificationOfListedCompany(models.Model):
 
 
     class Meta:
-        db_table = 'listed_company'
+        db_table = 'classification_of_listedCompany'
+        managed = False
+
+
+class MarketTopGainer(models.Model):
+    symbol = models.TextField(max_length=20, primary_key=True)
+    ltp = models.DecimalField(max_digits=20, decimal_places=2)
+    pointChange = models.DecimalField(max_digits=20, decimal_places=2)
+    percentageChange = models.DecimalField(max_digits=5, decimal_places=2)
+
+    class Meta:
+        db_table = 'top_gainers'
+        managed = False
+
+class MarketTopLoser(models.Model):
+    symbol = models.TextField(max_length=20, primary_key=True)
+    ltp = models.DecimalField(max_digits=20, decimal_places=2)
+    pointChange = models.DecimalField(max_digits=20, decimal_places=2)
+    percentageChange = models.DecimalField(max_digits=5, decimal_places=2)
+
+    class Meta:
+        db_table = 'top_losers'
+        managed = False
+
+class MarketTopTrades(models.Model):
+    symbol = models.TextField(max_length=20, primary_key=True)
+    shareTraded = models.BigIntegerField()
+    closingPrice = models.DecimalField(max_digits=20, decimal_places=2)
+
+    class Meta:
+        db_table = 'top_trades'
+        managed = False
+
+class MarketTopTransaction(models.Model):
+    symbol = models.TextField(max_length=20, primary_key = True)
+    totalTrades = models.BigIntegerField()
+    lastTradedPrice = models.DecimalField(max_digits=20, decimal_places=2)
+
+    class Meta:
+        db_table = 'top_transactions'
+        managed = False
+
+class MarketTopTurnover(models.Model):
+    symbol = models.TextField(max_length=20,primary_key=True)
+    turnover = models.DecimalField(max_digits=20, decimal_places=2)
+    closingPrice = models.DecimalField(max_digits=20, decimal_places=2)
+
+    class Meta:
+        db_table = 'top_turnover'
         managed = False

@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Market Overview</h1>
+
+    <div class="market-section">
+        <h2>Top Gainers</h2>
+        <button onclick="location.href='{% url 'view_all_gainers' %}'">View More</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>LTP</th>
+                    <th>Point Change</th>
+                    <th>% Change</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for gainer in gainers %}
+                <tr>
+                    <td>{{ gainer.symbol }}</td>
+                    <td>{{ gainer.ltp }}</td>
+                    <td>{{ gainer.pointChange }}</td>
+                    <td>{{ gainer.percentageChange }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No gainers data available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="market-section">
+        <h2>Top Losers</h2>
+        <button onclick="location.href='{% url 'view_all_losers' %}'">View More</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>LTP</th>
+                    <th>Point Change</th>
+                    <th>% Change</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for loser in losers %}
+                <tr>
+                    <td>{{ loser.symbol }}</td>
+                    <td>{{ loser.ltp }}</td>
+                    <td>{{ loser.pointChange }}</td>
+                    <td>{{ loser.percentageChange }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No losers data available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="market-section">
+        <h2>Top Trades</h2>
+        <button onclick="location.href='{% url 'view_all_trades' %}'">View More</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Share Traded</th>
+                    <th>Closing Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for trade in trades %}
+                <tr>
+                    <td>{{ trade.symbol }}</td>
+                    <td>{{ trade.shareTraded }}</td>
+                    <td>{{ trade.closingPrice }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3">No trades data available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="market-section">
+        <h2>Top Transactions</h2>
+        <button onclick="location.href='{% url 'view_all_transactions' %}'">View More</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Total Trades</th>
+                    <th>Last Traded Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.symbol }}</td>
+                    <td>{{ transaction.totalTrades }}</td>
+                    <td>{{ transaction.lastTradedPrice }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3">No transactions data available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="market-section">
+        <h2>Top Turnovers</h2>
+        <button onclick="location.href='{% url 'view_all_turnovers' %}'">View More</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Turnover</th>
+                    <th>Closing Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for turnover in turnovers %}
+                <tr>
+                    <td>{{ turnover.symbol }}</td>
+                    <td>{{ turnover.turnover }}</td>
+                    <td>{{ turnover.closingPrice }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3">No turnover data available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .market-section {
+        margin: 20px 0;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+    }
+    button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+    button:hover {
+        background-color: #218838;
+    }
+</style>
+
+
+{% endblock %}

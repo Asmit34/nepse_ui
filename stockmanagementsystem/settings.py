@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
     'app.apps.AppConfig',
+    'django_crontab',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +52,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 ROOT_URLCONF = 'stockmanagementsystem.urls'
 
@@ -75,15 +82,18 @@ WSGI_APPLICATION = 'stockmanagementsystem.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+# import logging
+# APP_LOG_FILENAME = os.path.join(BASE_DIR, 'log/app.log')
+# ERROR_LOG_FILENAME = os.path.join(BASE_DIR, 'log/error.log')
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'stock',
-        'USER': 'postgres',
-        'PASSWORD': 'asmitoli123',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.environ.get('DB_NAME', 'data'),
+        'USER': os.environ.get('DB_USER', 'stock'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'aayusholi123'),
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
 
@@ -142,3 +152,9 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'olihari150@gmail.com'
 EMAIL_HOST_PASSWORD = 'harioli1234'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+
+# CRONJOBS = [
+#     ('20 9 * * *', 'app.cron.print_hello')
+# ]

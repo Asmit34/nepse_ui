@@ -3,9 +3,9 @@ from sqlalchemy import create_engine
 import os
 
 # Database configuration
-DB_NAME = 'stock'
-DB_USER = 'postgres'
-DB_PASSWORD = 'asmitoli123'
+DB_NAME = 'data'
+DB_USER = 'stock'
+DB_PASSWORD = 'aayusholi123'
 DB_HOST = 'localhost'
 DB_PORT = '5432'
 
@@ -34,5 +34,6 @@ def load_csv_to_db(directory):
                 print(f'Error loading {filename}: {e}')
 
 # Directory containing the CSV files
-csv_directory = r'C:\Users\Asmit\Desktop\stock-management-system-main\csv'
+csv_directory = '/mnt/c/Users/Asmit/Desktop/stock-management-system-main/csv'
+
 load_csv_to_db(csv_directory)

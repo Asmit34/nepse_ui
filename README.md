@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project is a Django-based stock management system that utilizes a PostgreSQL database named **stock**. The database is pre-populated with data from CSV files. This README provides step-by-step instructions for setting up the project on another user's machine.
+This project is a Django-based stock management system that utilizes a PostgreSQL database named **data**. The database is pre-populated with data from CSV files. This README provides step-by-step instructions for setting up the project on another user's machine.
 
 ## Prerequisites
 
@@ -21,17 +21,17 @@ You can install the required Python packages using pip:
 
 ## Create the Database
 
-Ensure you have a PostgreSQL server running. Create a database named `stock` using the following SQL command:
+Ensure you have a PostgreSQL server running. Create a database named `data` using the following SQL command:
 
 ```sql
-CREATE DATABASE stock;
+CREATE DATABASE data;
 ```
 ## Restore Existing Data
 If you have received a database dump file (stock_dump.sql), restore the database using the following command:
 
 
 ```bash
-psql -U postgres -d stock -f stock_dump.sql
+psql -U stock -d data -f stock_dump.sql
 ```
 Make sure to adjust the command if your PostgreSQL username is different.
 
@@ -39,8 +39,8 @@ Make sure to adjust the command if your PostgreSQL username is different.
 The project uses environment variables to configure database access. You need to set the following environment variables on your machine:
 
 ```bash
-DB_NAME: The name of the database (default: stock)
-DB_USER: The PostgreSQL user (default: postgres)
+DB_NAME: The name of the database (default: data)
+DB_USER: The PostgreSQL user (default: stock)
 DB_PASSWORD: The password for the PostgreSQL user
 DB_HOST: The database host (default: localhost)
 DB_PORT: The database port (default: 5432)
@@ -53,8 +53,8 @@ On Windows
 Open Command Prompt and run:
 
 ```bash
-set DB_NAME=stock
-set DB_USER=postgres
+set DB_NAME=data
+set DB_USER=stock
 set DB_PASSWORD=your_actual_password
 set DB_HOST=localhost
 set DB_PORT=5432
@@ -64,8 +64,8 @@ On Linux or macOS
 Open Terminal and run:
 
 ```bash
-export DB_NAME=stock
-export DB_USER=postgres
+export DB_NAME=data
+export DB_USER=stock
 export DB_PASSWORD=your_actual_password
 export DB_HOST=localhost
 export DB_PORT=5432

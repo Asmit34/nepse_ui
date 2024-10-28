@@ -31,7 +31,7 @@ If you have received a database dump file (stock_dump.sql), restore the database
 
 
 ```bash
-psql -U stock -d data -f stock_dump.sql
+psql -U stock -d data -f data_dump.sql
 ```
 Make sure to adjust the command if your PostgreSQL username is different.
 

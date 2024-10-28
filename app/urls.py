@@ -3,7 +3,7 @@ from . import views
 from .views import market_overview
 
 urlpatterns = [
-    # path('', views.index_view, name='index'),
+    path('', views.index_view, name='index'),
     path('', market_overview, name='home'),
     path('terms-and-conditions/', views.terms_condition_view, name='terms_conditions'),
     path('all-securities/', views.all_securities_view, name='all_securities'),
